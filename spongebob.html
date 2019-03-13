@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Spongebobbin for Gifs</title>
+</head>
+
+
+<body>
+
+        <button id="cat-button">magical cat button</button>
+        <div id="images">
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
+          //This is for every time the cat button is clicked
+          $("#cat-button").on("click", function() {
+      
+            //this is the url that we will use to get all the images
+            var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=cats";
+      
+            //we are going to query the giphy cat url 
+            $.ajax({
+              url: queryURL,
+              method: "GET"
+            })
+      
+            //the then function will loop in each response according to the fastest response time
+              .then(function(response) {
+      
+              //this is setting the image url to total the object (response-data-image-orig url)
+                var imageUrl = response.data.image_original_url;
+      
+                //this is making an image div to place the cat image each time
+                var catImage = $("<img>");
+      
+                //this is adding a source attribute to the div in html and sets it to the url, makes it appear on the page
+                catImage.attr("src", imageUrl);
+                catImage.attr("alt", "cat image");
+      
+                //this inserts a new image for each time the button is clicked added to the top of the other images
+                $("#images").prepend(catImage);
+              });
+          });
+        </script>
+
+<img src="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-still="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-animate="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif" data-state="still" class="gif">
+<img src="https://media2.giphy.com/media/8rFQp4kHXJ0gU/200_s.gif" data-still="https://media2.giphy.com/media/8rFQp4kHXJ0gU/200_s.gif" data-animate="https://media2.giphy.com/media/8rFQp4kHXJ0gU/200.gif" data-state="still" class="gif">
+<img src="https://media3.giphy.com/media/W6LbnBigDe4ZG/200_s.gif" data-still="https://media3.giphy.com/media/W6LbnBigDe4ZG/200_s.gif" data-animate="https://media3.giphy.com/media/W6LbnBigDe4ZG/200.gif" data-state="still" class="gif">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+  $(".gif").on("click", function() {
+    // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+    var state = $(this).attr("data-state");
+    // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+    // Then, set the image's data-state to animate
+    // Else set src to the data-still value
+    if (state === "still") {
+      // ----These 3 lines are equivalent to line 32----
+
+      // `this` is the img that I clicked on.
+      // Turn that into a jquery object
+      var imageIClickedOn = $(this);
+      // Get the value of the data-animate attribute on the img I clicked on
+      var animatedURL = imageIClickedOn.attr("data-animate");
+      // Set the src attribute on the img I clicked on
+      imageIClickedOn.attr("src", animatedURL);
+
+      $(this).attr("src", $(this).attr("data-animate"));
+      $(this).attr("data-state", "animate");
+    } else {
+      $(this).attr("src", $(this).attr("data-still"));
+      $(this).attr("data-state", "still");
+    }
+  });
+</script>
+
+      
+    
+</body>
+</html>
