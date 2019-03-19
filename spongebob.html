@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
-<html>
 <head>
     <meta charset="utf-8">
     <title>Spongebobbin for Gifs</title>
@@ -18,7 +16,7 @@
       </div>
       <div class="jumbotron row">
           <form id="character-form">
-              <label for="character-input">Enter your favorite character!</label>
+              <label for="character-input">Enter your favorite Spongebob character!</label>
               <input type="text" id="character-input">
               <input id="add-character" type="submit" value="Name someone!">
           </form>
@@ -33,37 +31,79 @@
           </div>
       </div>
       <br>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
-          //This is for every time the cat button is clicked
-          $("#spongebob-button").on("click", function() {
-      
-            //this is the url that we will use to get all the images
-            var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=spongebob";
-      
-            //we are going to query the giphy cat url 
-            $.ajax({
-              url: queryURL,
-              method: "GET"
-            })
-      
-            //the then function will loop in each response according to the fastest response time
-              .then(function(response) {
-      
-              //this is setting the image url to total the object (response-data-image-orig url)
-                var imageUrl = response.data.image_original_url;
-      
-                //this is making an image div to place the cat image each time
-                var catImage = $("<img>");
-      
-                //this is adding a source attribute to the div in html and sets it to the url, makes it appear on the page
-                catImage.attr("src", imageUrl);
-                catImage.attr("alt", "cat image");
-      
-                //this inserts a new image for each time the button is clicked added to the top of the other images
-                $("#images").prepend(catImage);
-              });
-          });
-        </script>
+        $("#spongebob-button").on("click", function() {
 
+          var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=spongebob";
+
+          $.ajax({
+            url: queryURL,
+            method: "GET"
+          })
+
+            .then(function(response) {
+              var imageUrl = response.data.image_original_url;
+              var spongebobImage = $("<img>");
+
+              spongebobImage.attr("src", imageUrl);
+              spongebobImage.attr("alt", "spongebob image");
+
+              $("#images").prepend(spongebobImage);
+
+              $(document).ready(function() {
+            var characters = ["Spongebob", "Patrick", "Squidward", "Crabby Patty", "Mr. Crabs", "Sandy", "Plankton", "Mrs. Puff", "Gary"];
+        
+            function renderButtons() {
+                $('#buttons-view').empty();
+        
+                for (var i = 0; i < characters.length; i++) {
+        
+                    var newButton = $("<button class='btn btn-primary btn-lg active'>");
+                    newButton.attr("data-person", characters[i]);
+                    newButton.text(characters[i]);
+
+                    $("#buttons-view").append(newButton);
+                }
+            }
+            renderButtons();
+        
+            $("#add-character").on("click", function(event) {
+                event.preventDefault();
+                var char = $("#character-input").val().trim();
+                characters.push(char);
+                renderButtons();
+            });
+        
+            $("#buttons-view").on("click", ".btn-primary", function() {
+        
+                var person = $(this).attr("data-person");
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + person + "&api_key=dc6zaTOxFJmzC&limit=15";
+                $.get(queryURL).done(function(response) {
+                    var results = response.data;
+                    var stillImage = results[0].images.original_still.url
+                    var gifImage = results[0].images.original.url
+                    $('.rating').html('Rated: ' + results[0].rating);
+                    $('.image').html('<img class="img-thumbnail" src="' + stillImage + ' "data-state="still"' + '>');
+                    $('.image').html('<img class="img-thumbnail" src="' + gifImage + ' "data-state="still"' + '>');
+        
+                });
+                $(".img-thumbnail").on({
+                    'click': function() {
+                        var src = ($(this).attr('src') === stillImage) ?
+                            stillImage :
+                            gifImage;
+                        $(this).attr('src', src);
+                    }
+                });
+            });
+        });
+        
+                  });
+              });
+        </script>
+      </body>
+  </html>
+
+
+<!-- Ive got to make sure there are 10 spaces for the gifs to live and keep appending to each one -->
