@@ -39,14 +39,14 @@
 
             .then(function(response) {
             var characters = ["Spongebob", "Patrick", "Squidward", "Crabby Patty", "Mr. Crabs", "Sandy", "Plankton", "Mrs. Puff", "Gary"];
-            
+            // $("#buttons-view").on("click", ".btn-primary", function(queryURL)
             function renderButtons() {
                 $('#buttons-view').empty();
                 
                 for (var i = 0; i < characters.length; i++) {
                     
                     var newButton = $("<button class='btn btn-primary btn-lg active'>");
-                        newButton.attr("data-person", characters[i]);
+                        newButton.attr("add-character", characters[i]);
                         newButton.text(characters[i]);
                         
                         $("#buttons-view").append(newButton);
@@ -62,12 +62,11 @@
                 });
                 
                 $("#buttons-view").on("click", ".btn-primary", function() {
-                    var person = $(this).attr("data-person");
+                    var person = $(this).attr("add-character");
                     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + person + "&api_key=dc6zaTOxFJmzC&limit=15";
                     $.get(queryURL).done(function(response) {
                         // i want this to add a new gif however many times i click on it
                         var results = response.data;
-                        var newImage = $("<img>");
                         var stillImage = results[0].images.original_still.url
                         var gifImage = results[0].images.original.url
                         $('.rating').html('Rated: ' + results[0].rating);
