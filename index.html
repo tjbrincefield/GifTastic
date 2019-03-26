@@ -7,11 +7,6 @@
 </head>
 
 <body>
-
-        <button id="spongebob-button">Spongebob Magic</button>
-        <div id="images">
-        </div>
-
         <div class="jumbotron col-xs-12 col-md-12" id="buttons-view"></div>
       </div>
       <div class="jumbotron row">
@@ -33,7 +28,7 @@
       <br>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
-        $("#spongebob-button").on("click", function() {
+            $(document).ready(function() {
 
           var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=spongebob";
 
@@ -43,15 +38,6 @@
           })
 
             .then(function(response) {
-              var imageUrl = response.data.image_original_url;
-              var spongebobImage = $("<img>");
-
-              spongebobImage.attr("src", imageUrl);
-              spongebobImage.attr("alt", "spongebob image");
-
-              $("#images").prepend(spongebobImage);
-
-              $(document).ready(function() {
             var characters = ["Spongebob", "Patrick", "Squidward", "Crabby Patty", "Mr. Crabs", "Sandy", "Plankton", "Mrs. Puff", "Gary"];
         
             function renderButtons() {
@@ -63,18 +49,19 @@
                     newButton.attr("data-person", characters[i]);
                     newButton.text(characters[i]);
 
-                    $("#buttons-view").append(newButton);
+                    $("#buttons-view").prepend(newButton);
                 }
             }
             renderButtons();
-        
+            
             $("#add-character").on("click", function(event) {
                 event.preventDefault();
                 var char = $("#character-input").val().trim();
                 characters.push(char);
                 renderButtons();
+                // i want this to add a new gif however many times i click on it
             });
-        
+            
             $("#buttons-view").on("click", ".btn-primary", function() {
         
                 var person = $(this).attr("data-person");
@@ -101,7 +88,7 @@
         });
         
                   });
-              });
+            //   });
         </script>
       </body>
   </html>
